@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ambient-sum-307718",
+  "private_key_id": "71f6138c3d169d2f801e8992bc04bf3106aada94",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC812QBuHL0cD1P\nrqUFYRhrcECtML0PgbQ7Bz/yEnPVdMY+BUZTd042lPnvDznlxijBqRETDgYSLtFb\n1oGkO5SoHTIyLyTiStwy/2RrGmDiXjaLCPBXsJU4FoxYN6lx01DymAaXepOyWH6Q\nkgvkZSw+geAL996sv2YzoB1eqVab0gn3YWpsc3SeK0/vtayhptNHPxxxSjs+f7mJ\nR8G39+2Y2kEobSun/W5j4AUGHocv+JeMoN9jlYDjyeqj4VT7BAdsv+b/ROnWG5FA\n/HJQCeZNVZag+sohXORcIm6emA+V2SsMPJgRqol8QwjXMWCoq3uahzqAgzmxMKf0\nLQsVPuhhAgMBAAECggEAHggpJObnDT2+Wmo9Xz4iSo/XEVQDdTBc79hG0KIjnspL\n7rgbB5IdM6v8lYq32/VoLOhMyVl9GK4uaGsUQgChsxy1i2qY9I4QN+IK38eZqdZu\n2SyqQF/aU0mutybfATWolXQc9EEvtPjC5A396yw13Zj8/xpD5PgpckNf+Fp45h26\nZOcuY6zZZUG6FEZw2VI9aXzw+QajEHxnEXYz0UyRVvcikUX18IUfo9hPkUIaKUwE\nd/rNwjTYIcCwsPmwO9QzOfNkqtsRl7nAM1bl1uzmw0Vr+iQ+V4SXzwwD1HYuCnCU\nydiQ9vEQK7S2nd3+Cm48ZCPp87ju2h8Vv+x7HrzN2wKBgQDy6AIbmwy5NC6Gjc4Q\nKY4NFDa1EEIzG05Wr+GSqqa9RmvFnl5Cu+3eFck5wHBSM6QJqCYkyCrJwZQkrmz7\nVuZpJekWnUNCN/Tm9lU2eR+j60vXYBzDk+MOF9gOrTyoiMARKDsZ3B06xXFLqXeV\nAoc22BL7ExfUg87Og/LZ40MdVwKBgQDHBU/su2/RgVGOE6xpxCbOSXlasYTnbgju\nR7a9uMbWqB4aEPc23vFo290QCFHhJRlm4BzoV3zI7TWHbnnC0PGD8Tl3ITri1ILZ\nYA6M6Vr7rSHyc6s7NSn6IvB3u1514kItBsPVikETZuisFNEk6Psku8QC6jxCKZbC\ndc8/QHPdBwKBgQCAamWK4JqGYu7h1aAF7WIayf/uEy1cRWhR7ePMHQnPcKZTMFlW\n4HFtgokCThlTa9eh/1JDCcuNJBjEl64n5hYjqpYijXtcS6beX4ZHKRuwFhnfQAGU\n598WuUZQ5Ab4dmtL5r/v+O0+/9jYjjwY++At/2dxcvObNx+jECDYTgxSOwKBgFfd\nqomzvwxZ8a2uVeJkLVXJ7n/x++FJHTxGARIF8BN5KcEMWHirOR24ZALeCXhDLtHS\nhDC332m+AHIIfk1afiZoa5yC2UKn3BUoaYQgyoBu0Zv/IUwEjsHWhx/1YyDcgabr\nY651WYG9X2AJ2MRY7/gpxcIbs/rp7Ztw88zTIdQlAoGAPDK789J1kTFtULAEF1rM\nBsm0/g597vaepEQP6cgRFVg/6EtQqHdpMJWYXGG9WDyhhAc1OFgGeeiTVC77xyNV\nOlgbXdyxPCh5JtjuSkl0DDeW2ShsByrN6OTsLQowD1rQUefAt5USTjQcjMMNwMdi\nAbWxzZHiUA79Wad2/p+JM0k=\n-----END PRIVATE KEY-----\n",
+  "client_email": "terminalcalendar@ambient-sum-307718.iam.gserviceaccount.com",
+  "client_id": "111749544208588787840",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/terminalcalendar%40ambient-sum-307718.iam.gserviceaccount.com"
+}
