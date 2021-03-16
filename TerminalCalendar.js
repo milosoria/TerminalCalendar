@@ -1,5 +1,4 @@
 // Requires
-var gapi = require("gapi");
 const secrets = require("secrets.json");
 // Set client info and api token with gapi
 function authorize(){
@@ -21,16 +20,17 @@ const eventTags = {
 	important: 4320,
 	must: 7200
 };
-const eventRegex = {
-	date: /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
-	hour: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
-};
+// const eventRegex = {
+// 	date: /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
+// 	hour: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
+// };
 // require event name, date, hour, use one of these tags [casual, important, must] -> [notify email: 1 day before, 3 day before, 1 week before]
-// Example command line: 'Meeting' 19-2-2021 16:40 must
-const start = new Date(...process.argv[1].split('-'));
-const end = new Date;
+// Example command line: 'Meeting' 19-2-2021 16:40 16:50 must
+let day,month,year = process.argv[1].split('-'); // DATE
+let shour,sminutes = process.argv[2].split(':'); // START HOUR 
+let ehour,eminutes = process.argv[3].split(':'); // END HOUR 
 let args = {
-	date: [, process.argv[2]],
+	date: [new Date(year, month, day, shour, sminutes), new Date(year, month, day, ehour, eminutes)], //"2015-05-28T09:00:00-07:00"
 
 };
 
