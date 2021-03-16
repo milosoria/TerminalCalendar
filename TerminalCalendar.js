@@ -1,83 +1,67 @@
 // Requires
-const secrets = require("secrets.json");
-// Set client info and api token with gapi
-function authorize(){
-	gapi.setAPiKey(secrets.api_key)
-	gapi.auth.authorize(
-		{
-		client_id: secrets.client_id, 
-		scope: secrets.scopes	
-	}, (authResult) => {
-		if (authResult && !authResult.error) {
-			console.log("Auth was successful!✍️");
-		} else {
-			console.log("Auth was not successful⁉️");
-		}
-	})
-}
+const { google } = require("googleapis");
+const calendar = google.calendar('v3');
+// require event name, date, hour, use one of these tags [casual, important, must] -> [notify email: 1 day before, 3 day before, 1 week before]
+// Example command line: $1 'Meeting' $2 19-2-2021 $3 16:40 $4 16:50 $5 must
 const eventTags = {
 	casual: 1440,
 	important: 4320,
-	must: 7200
+	must: 7200,
 };
-// const eventRegex = {
-// 	date: /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
-// 	hour: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
-// };
-// require event name, date, hour, use one of these tags [casual, important, must] -> [notify email: 1 day before, 3 day before, 1 week before]
-// Example command line: 'Meeting' 19-2-2021 16:40 16:50 must
-let day,month,year = process.argv[1].split('-'); // DATE
-let shour,sminutes = process.argv[2].split(':'); // START HOUR 
-let ehour,eminutes = process.argv[3].split(':'); // END HOUR 
+let [day,
+month,
+year] = process.argv[3].split("-"); // DATE
+let [shour, sminutes] = process.argv[4].split(":"); // START HOUR
+let [ehour, eminutes] = process.argv[5].split(":"); // END HOUR
 let args = {
-	date: [new Date(year, month, day, shour, sminutes), new Date(year, month, day, ehour, eminutes)], //"2015-05-28T09:00:00-07:00"
-
+	date: [
+		new Date(year, month, day, shour, sminutes),
+		new Date(year, month, day, ehour, eminutes),
+	], 
+	importance: process.argv[6]
 };
-
-const eventCreator = (args) => {
-	var event = {
-		summary: args.name,
-		location: "",
-		description: "",
-		start: {
-			dateTime: args.date[0], //"2015-05-28T09:00:00-07:00",
-			timeZone: "America/Santiago",
-		},
-		end: {
-			dateTime: args.date[1], //"2015-05-28T17:00:00-07:00",
-			timeZone: "America/Santiago",
-		},
-		recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
-		attendees: [],
-		reminders: {
-			useDefault: false,
-			overrides: [
-				{ method: "email", minutes: eventTags[args.importance] },
-				{ method: "popup", minutes: 60 },
-			],
-		},
-	};
-};
-
-var request = gapi.client.calendar.events.insert({
-	calendarId: "primary",
-	resource: event,
-});
-
-request.execute(function (event) {
-	appendPre("Event created: " + event.htmlLink);
-});
-async function CreateEvent() {
-	const response = await fetch(url, {
-		method: "POST", // *GET, POST, PUT, DELETE, etc.
-		mode: "cors", // no-cors, *cors, same-origin
-		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-		credentials: "same-origin", // include, *same-origin, omit
-		headers: {
-			"Content-Type": "application/json",
-		},
-		redirect: "follow", // manual, *follow, error
-		referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		body: JSON.stringify(data), // body data type must match "Content-Type" header
+console.log()
+// Main auth flow
+async function main(args) {
+	const auth = new google.auth.GoogleAuth({
+	keyFile: 'ambient-sum-307718-c8c2114ef0eb.json',
+	scopes: ["https://www.googleapis.com/auth/calendar"],
 	});
+	const authClient = await auth.getClient();
+	// Acquire an auth client, and bind it to all future calls
+	google.options({ auth: authClient });
+	const res = await calendar.events.insert({
+		calendarId: "primary",
+		requestBody: {
+			summary: args.name,
+			location: "",
+			description: "",
+			start: {
+				dateTime: args.date[0], //"2015-05-28T09:00:00-07:00",
+				timeZone: "America/Santiago",
+			},
+			end: {
+				dateTime: args.date[1], //"2015-05-28T17:00:00-07:00",
+				timeZone: "America/Santiago",
+			},
+			recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
+			attendees: ["camilo.soria@uc.cl"],
+			reminders: {
+				useDefault: false,
+				overrides: [
+					{ method: "email", minutes: eventTags[args.importance] },
+					{ method: "popup", minutes: 60 },
+				],
+			},
+		},
+	})
+	return res;
+}
+// Function call
+try{
+	main(args).catch((reason)=>{
+		console.log(reason)
+	});
+} catch (e){
+	console.log(`Error 😡 found: ${e}`)
 }
