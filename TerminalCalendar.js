@@ -1,39 +1,62 @@
-// print process.argv
-// require event name, date, hour, use one of these tags [casual, important, must] -> [notify email: 1 day before, 3 day before, 1 week before]
-// Example command line: 'Meeting' 19-2-2021 16:40 must
-process.argv.forEach((val, index, array) => {
-	console.log(index + ": " + val);
-});
-const eventTags = {
-    casual : 1440,
-    important : 4320,
-    must : 7200 
+// Requires
+var gapi = require("gapi");
+const secrets = require("secrets.json");
+// Set client info and api token with gapi
+function authorize(){
+	gapi.setAPiKey(secrets.api_key)
+	gapi.auth.authorize(
+		{
+		client_id: secrets.client_id, 
+		scope: secrets.scopes	
+	}, (authResult) => {
+		if (authResult && !authResult.error) {
+			console.log("Auth was successful!✍️");
+		} else {
+			console.log("Auth was not successful⁉️");
+		}
+	})
 }
+const eventTags = {
+	casual: 1440,
+	important: 4320,
+	must: 7200
+};
 const eventRegex = {
 	date: /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
 	hour: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
 };
-var event = {
-	summary: "Google I/O 2015",
-	location: "800 Howard St., San Francisco, CA 94103",
-	description: "A chance to hear more about Google's developer products.",
-	start: {
-		dateTime: "2015-05-28T09:00:00-07:00",
-		timeZone: "America/Los_Angeles",
-	},
-	end: {
-		dateTime: "2015-05-28T17:00:00-07:00",
-		timeZone: "America/Los_Angeles",
-	},
-	recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
-	attendees: [],
-	reminders: {
-		useDefault: false,
-		overrides: [
-			{ method: "email", minutes: 24 * 60 },
-			{ method: "popup", minutes: 60 },
-		],
-	},
+// require event name, date, hour, use one of these tags [casual, important, must] -> [notify email: 1 day before, 3 day before, 1 week before]
+// Example command line: 'Meeting' 19-2-2021 16:40 must
+const start = new Date(...process.argv[1].split('-'));
+const end = new Date;
+let args = {
+	date: [, process.argv[2]],
+
+};
+
+const eventCreator = (args) => {
+	var event = {
+		summary: args.name,
+		location: "",
+		description: "",
+		start: {
+			dateTime: args.date[0], //"2015-05-28T09:00:00-07:00",
+			timeZone: "America/Santiago",
+		},
+		end: {
+			dateTime: args.date[1], //"2015-05-28T17:00:00-07:00",
+			timeZone: "America/Santiago",
+		},
+		recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
+		attendees: [],
+		reminders: {
+			useDefault: false,
+			overrides: [
+				{ method: "email", minutes: eventTags[args.importance] },
+				{ method: "popup", minutes: 60 },
+			],
+		},
+	};
 };
 
 var request = gapi.client.calendar.events.insert({
