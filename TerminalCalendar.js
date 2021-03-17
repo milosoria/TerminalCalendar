@@ -1,35 +1,59 @@
 // Requires
 const { google } = require("googleapis");
-const calendar = google.calendar('v3');
-// require event name, date, hour, use one of these tags [casual, important, must] -> [notify email: 1 day before, 3 day before, 1 week before]
-// Example command line: $1 'Meeting' $2 19-2-2021 $3 16:40 $4 16:50 $5 must
-const eventTags = {
-	casual: 1440,
-	important: 4320,
-	must: 7200,
-};
-let [day,
-month,
-year] = process.argv[3].split("-"); // DATE
+const credentials  = require("./credentials.json");
+const token  = require("./token.json");
+const fs = require("fs");
+const readline = require("readline");
+// Example command line: $1 'Meeting' $2 19-2-2021 $3 16:40 $4 16:50 $5 2
+let [day, month, year] = process.argv[3].split("-"); // DATE
 let [shour, sminutes] = process.argv[4].split(":"); // START HOUR
 let [ehour, eminutes] = process.argv[5].split(":"); // END HOUR
-let args = {
+const args = {
 	date: [
-		new Date(year, month, day, shour, sminutes),
-		new Date(year, month, day, ehour, eminutes),
-	], 
-	importance: process.argv[6]
+		new Date(year, parseInt(month)+1, day, shour, sminutes),
+		new Date(year, parseInt(month)+1, day, ehour, eminutes),
+	],
+	importance: parseInt(process.argv[6]),
+	name: process.argv[2],
 };
-console.log()
-// Main auth flow
-async function main(args) {
-	const auth = new google.auth.GoogleAuth({
-	keyFile: 'ambient-sum-307718-c8c2114ef0eb.json',
-	scopes: ["https://www.googleapis.com/auth/calendar"],
+//Get access token func
+function getAccessToken(oAuth2Client, callback) {
+	const authUrl = oAuth2Client.generateAuthUrl({
+		access_type: "offline",
+		scope: ["https://www.googleapis.com/auth/calendar.events"],
 	});
-	const authClient = await auth.getClient();
-	// Acquire an auth client, and bind it to all future calls
-	google.options({ auth: authClient });
+	console.log("Authorize this app by visiting this url:", authUrl);
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
+	rl.question("Enter the code from that page here: ", (code) => {
+		rl.close();
+		oAuth2Client.getToken(code, (err, token) => {
+			if (err) return console.error("Error retrieving access token", err);
+			oAuth2Client.setCredentials(token);
+			// Store the token to disk for later program executions
+			fs.writeFile('token.json', JSON.stringify(token), (err) => {
+				if (err) return console.error(err);
+				console.log("Token stored to", 'token.json');
+			});
+			callback(oAuth2Client);
+		});
+	});
+}
+// Get o2auth func
+function auth() {
+	const oAuth2Client = new google.auth.OAuth2(
+		credentials.client_id,
+		credentials.client_secret,
+		credentials.redirect_uris[0]
+	);
+	oAuth2Client.setCredentials(token)
+	return oAuth2Client;
+}
+// Main flow func: calendar event insertion
+async function main(auth) {
+	const calendar = google.calendar({ version: "v3", auth });
 	const res = await calendar.events.insert({
 		calendarId: "primary",
 		requestBody: {
@@ -45,23 +69,25 @@ async function main(args) {
 				timeZone: "America/Santiago",
 			},
 			recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
-			attendees: ["camilo.soria@uc.cl"],
+			attendees: [],
 			reminders: {
 				useDefault: false,
 				overrides: [
-					{ method: "email", minutes: eventTags[args.importance] },
+					{ method: "email", minutes: args.importance * 24 * 60 },
 					{ method: "popup", minutes: 60 },
 				],
 			},
 		},
-	})
-	return res;
+	});
+	console.log(`Response 🧞 ${res}`)
 }
 // Function call
-try{
-	main(args).catch((reason)=>{
-		console.log(reason)
+try {
+	const Oauth = auth();
+	//getAccessToken(Oauth);
+	main(Oauth).catch((reason) => {
+		console.log(reason);
 	});
-} catch (e){
-	console.log(`Error 😡 found: ${e}`)
+} catch (e) {
+	console.log(`Error 😡 found: ${e}`);
 }
