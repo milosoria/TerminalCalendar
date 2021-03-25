@@ -1,4 +1,4 @@
-**TerminalCalendar: create bash script with the following code:** 
+**TerminalCalendar: create bash script with the following code:**
 
 ```
 event () {
@@ -7,6 +7,7 @@ event () {
 ```
 Place this bash script in usr/local/bin and name it ".my_custom_commands.sh". Paste in your .bash_profile or .bashrc the following line of code:
 ```
-source ~/.my_custom_commands.sh 
+source ~/.my_custom_commands.sh
 ```
-And then run source with your .bashrc
+And then run source with your .bashrc or .bash_profile.
+For the credentials you will have to follow the instructions specified here <https://developers.google.com/calendar/quickstart/js>. Once you have your client_id, redirect_uris, client_secret, create a credentials.json file to store them. Finally, in TerminalCalendar.js getAccessToken function is defined to help you with Oauth2 flow. Run the function with the instructions specified in the comment line nested in main function. 
