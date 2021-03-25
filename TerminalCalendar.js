@@ -77,19 +77,19 @@ function auth() {
 		credentials.redirect_uris[0]
 	);
 	oAuth2Client.setCredentials(token);
+	oAuth2Client.forceRefreshOnFailure = true;
 	return oAuth2Client;
 }
 // Main flow func: calendar event insertion
 async function main(auth, event) {
 	const calendar = google.calendar({ version: "v3", auth });
-	const res = await calendar.events.insert(event);
-	console.log(`Response 🧞 ${res.data}`);
+	await calendar.events.insert(event);
 }
 // Function call
 try {
 	const Oauth = auth();
-	//getAccessToken(Oauth);
-	main(Oauth)
+	//getAccessToken(Oauth); if yo need to get the acces token uncomment this line and comment the next one
+	main(Oauth, event).catch((reason)=>console.log(`😡 Google Calendar Api had something to say:${reason}`))
 } catch (e) {
 	console.log(`Error 😡 found: ${e}`);
 }
