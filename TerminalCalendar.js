@@ -5,11 +5,17 @@ const token = require("./token.json");
 const fs = require("fs");
 const readline = require("readline");
 // Example command line: $1 'Meeting' $2 19-2-2021 $3 16:40 $4 16:50 $5 2
+
 // We first define our arguments and inputs for the event creation
-const [day, month, year] = process.argv[3].split("-"); // DATE
-const [shour, sminutes] = process.argv[4].split(":"); // START HOUR
-const [ehour, eminutes] = process.argv[5].split(":"); // END HOUR
-// Finally, args will contain the name of the event, the date, the start hour and end hour and the number of days for the email reminder
+try {
+    const [day, month, year] = process.argv[3].split("-"); // DATE
+    const [shour, sminutes] = process.argv[4].split(":"); // START HOUR
+    const [ehour, eminutes] = process.argv[5].split(":"); // END HOUR
+} catch (e){
+    console.log("Wrong Arguments: $1 EventName $2 date $3 StartTime $4 EndTime $ DaysForEmailNotification");
+    throw(e);
+}
+    // Finally, args will contain the name of the event, the date, the start hour and end hour and the number of days for the email reminder
 const args = {
 	date: [
 		new Date(year, parseInt(month) - 1, day, shour, sminutes),
@@ -88,8 +94,8 @@ async function main(auth, event) {
 // Function call
 try {
 	const Oauth = auth();
-	//getAccessToken(Oauth); if yo need to get the acces token uncomment this line and comment the next one
-	main(Oauth, event).catch((reason)=>console.log(`😡 Google Calendar Api had something to say:${reason}`))
+	getAccessToken(Oauth); //if yo need to get the acces token uncomment this line and comment the next one
+	// main(Oauth, event).catch((reason)=>console.log(`😡 Google Calendar Api had something to say:${reason}`))
 } catch (e) {
 	console.log(`Error 😡 found: ${e}`);
 }
