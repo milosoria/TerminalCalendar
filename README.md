@@ -1,6 +1,7 @@
-Take this to golang
-
 <h1>TerminalCalendar</h1>
+
+<h2>Installation</h2>
+- npm install calterm?
 
 <h2> Usage:</h2>
 - Create a shell script to run the program as a function:
