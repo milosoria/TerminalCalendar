@@ -1,14 +1,19 @@
+
 // Requires
-const { google } = require("googleapis");
+const {google} = require("googleapis");
 const fs = require("fs");
 const readline = require("readline");
 const inquirer = require("inquirer");
 
-// Validation of the day, month and year entered https://www.geeksforgeeks.org/program-check-date-valid-not/
-    // valid years range
-const VALIDYEARS = [new Date().getFullYear(), 9999];
+// VARIABLES DECLARATION
+// valid years range
+const VALIDYEARS = [ new Date().getFullYear(), 9999 ];
+let YEAR, MONTH;
+let answers;
 
-// Returns true if the year is valid
+// Validation of the day, month and year entered
+// https://www.geeksforgeeks.org/program-check-date-valid-not/ Returns true if
+// the year is valid
 function isLeap(year) {
     // Return true if year
     // is a multiple pf 4 and
@@ -19,162 +24,203 @@ function isLeap(year) {
 
 // Returns true if given
 // year is valid or not.
-    function isValidDate(d, m, y) {
-        // If year, month and day
-        // are not in given range
-        if (y > VALIDYEARS[1] || y < VALIDYEARS[0]) return false;
+function isValidDate(d, m, y) {
+    // If year, month and day
+    // are not in given range
+    if (y > VALIDYEARS[1] || y < VALIDYEARS[0])
+        return false;
 
-        if (m < 1 || m > 12) return false;
-        if (d < 1 || d > 31) return false;
+    if (m < 1 || m > 12)
+        return false;
+    if (d < 1 || d > 31)
+        return false;
 
-        // Handle February month
-        // with leap year
-        if (m == 2) {
-            if (isLeap(y)) return d <= 29;
-            else return d <= 28;
-        }
-
-        // Months of April, June,
-            // Sept and Nov must have
-        // number of days less than
-        // or equal to 30.
-            if (m == 4 || m == 6 || m == 9 || m == 11) return d <= 30;
-
-        return true;
+    // Handle February month
+    // with leap year
+    if (m == 2) {
+        if (isLeap(y))
+            return d <= 29;
+        else
+            return d <= 28;
     }
-// vaiables to use to validate day, after year adn month are entered
-let YEAR, MONTH;
 
-const questions = [
-    {
-        type: "input",
-        name: "name",
-        message: "Enter the name of the event",
-        validate(name) {
-            return /^[A-Za-z0-9 _.,;:!"'/$]*/.test(name);
-        },
-    },
-    {
-        type: "input",
-        name: "description",
-        message: "Enter the description of the event",
-        validate(description) {
-            return /^[A-Za-z0-9 _.,;:!"'/$]*/.test(description);
-        },
-    },
-    {
-        type: "input",
-        name: "month",
-        message: "Enter the month of the event (number)",
-        validate(month) {
-            let pass = true;
-            let isNan = true;
-            try {
-                isNan = isNaN(parseInt(month));
-            } catch (TypeError) {
-                isNan = false;
-            }
-            if (isNan || month < 1 || month > 12) {
-                pass = false;
-            }
-            if (pass) {
-                MONTH = month;
-                return true;
-            }
-            return "Please enter a valid month";
-        },
-    },
-    {
-        type: "input",
-        name: "year",
-        message: "Enter the year of the event (number)",
-        validate(year) {
-            let pass = true;
-            let isNan = true;
-            try {
-                isNan = isNaN(parseInt(year));
-            } catch (TypeError) {
-                isNan = false;
-            }
-            if (isNan || year < VALIDYEARS[0] || year > VALIDYEARS[1]) {
-                pass = false;
-            }
-            if (pass) {
-                YEAR = year;
-                return true;
-            }
-            return "Please enter a valid year";
-        },
-    },
-    {
-        type: "input",
-        name: "day",
-        message: "Enter the day of the event (number)",
-        validate(day) {
-            let isNan = true;
-            try {
-                isNan = parseInt(day);
-            } catch (TypeError) {
-                isNan = false;
-            }
-            const pass = isValidDate(day, MONTH, YEAR) && isNan;
+    // Months of April, June,
+        // Sept and Nov must have
+    // number of days less than
+    // or equal to 30.
+        if (m == 4 || m == 6 || m == 9 || m == 11)
+    return d <= 30;
 
-            if (pass) {
-                return true;
-            }
+    return true;
+}
 
-            return "Please enter a valid day";
+// parse answers for Date format
+function parseAnswers(answers){
+
+    const startTime = answers.startHour.split(':');
+    const endTime = answers.endHour.split(':');
+
+    return {
+        description: answers.description,
+        name: answers.name,
+        year: answers.year,
+        month: answers.month,
+        shour: startTime[0],
+        ehour: endTime[0],
+        sminutes: startTime[1],
+        eminutes: endTime[1],
+    }
+}
+
+function inquirerPrompt(){
+    // Create the questions
+    const questions = [
+        {
+            type : "input",
+            name : "name",
+            message : "Enter the name of the event",
+            validate(name) { return /^[A-Za-z0-9 _.,;:!"'/$]*/.test(name); },
         },
-    },
-    // TODO: require start hour and end hour
-    {
-        type: "input",
-            name: "reminder",
-            message:
-        "Days before the event to get a reminder (enter the number of days or 0 to disable the reminder)",
-            validate(days) {
-                return /^[0-9]/.test(days);
+        {
+            type : "input",
+            name : "description",
+            message : "Enter the description of the event",
+            validate(
+                description) { return /^[A-Za-z0-9 _.,;:!"'/$]*/.test(description); },
+        },
+        {
+            type : "input",
+            name : "month",
+            message : "Enter the month of the event (number)",
+            validate(month) {
+                let pass = true;
+                let isNan = true;
+                try {
+                    isNan = isNaN(parseInt(month));
+                } catch (TypeError) {
+                    isNan = false;
+                }
+                if (isNan || month < 1 || month > 12) {
+                    pass = false;
+                }
+                if (pass) {
+                    MONTH = month;
+                    return true;
+                }
+                return "Please enter a valid month";
             },
-    },
-];
+        },
+        {
+            type : "input",
+            name : "year",
+            message : "Enter the year of the event (number)",
+            validate(year) {
+                let pass = true;
+                let isNan = true;
+                try {
+                    isNan = isNaN(parseInt(year));
+                } catch (TypeError) {
+                    isNan = false;
+                }
+                if (isNan || year < VALIDYEARS[0] || year > VALIDYEARS[1]) {
+                    pass = false;
+                }
+                if (pass) {
+                    YEAR = year;
+                    return true;
+                }
+                return "Please enter a valid year";
+            },
+        },
+        {
+            type : "input",
+            name : "day",
+            message : "Enter the day of the event (number)",
+            validate(day) {
+                let isNan = true;
+                try {
+                    isNan = parseInt(day);
+                } catch (TypeError) {
+                    isNan = false;
+                }
+                const pass = isValidDate(day, MONTH, YEAR) && isNan;
 
-inquirer.prompt(questions).then((answers) => {
-    console.log("\n 🧞 Creating Event For Google Calendar ...");
-    console.log(JSON.stringify(answers, null, "  "));
-});
+                if (pass) {
+                    return true;
+                }
 
-// Finally, args will contain the name of the event, the date, the start hour and end hour and the number of days for the email reminder
-// const args = {
-    //     date: [
-        //         new Date(year, parseInt(month) - 1, day, shour, sminutes),
-        //         new Date(year, parseInt(month) - 1, day, ehour, eminutes),
-        //     ],
-    //     importance: parseInt(process.argv[6]),
-    //     name: process.argv[2],
-    // };
-// // With the args we define our event object
-// const event = {
-    //     calendarId: "primary",
-    //     requestBody: {
-        //         summary: args.name,
-        //         location: "",
-        //         description: "",
-        //         start: {
-            //             dateTime: args.date[0], //"2015-05-28T09:00:00-07:00",
-            //             timeZone: "America/Santiago",
-            //         },
-        //         end: {
-            //             dateTime: args.date[1], //"2015-05-28T17:00:00-07:00",
-            //             timeZone: "America/Santiago",
-            //         },
-        //         recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
-        //         attendees: [],
-        //         reminders: {
-            //             useDefault: false,
-            //             overrides: [
-                //                 { method: "email", minutes: args.importance * 24 * 60 },
-                //                 { method: "popup", minutes: 60 },
-                //             ],
-            //         },
-        //     },
-    // };
+                return "Please enter a valid day";
+            },
+        },
+        {
+            type : "input",
+            name : "reminder",
+            message :
+            "Days before the event to get a reminder (enter the number of days, by default 0)",
+            default : "0",
+            validate(days) { return /^[0-9]/.test(days); },
+        },
+        {
+            type : "input",
+            name : "startHour",
+            message : "Enter the start hour of the event (default to 12:00)",
+            default : "12:00",
+            validate(hour) {
+                return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(hour);
+            },
+        },
+        {
+            type : "input",
+            name : "endHour",
+            message : "Enter the end hour of the event (default to 17:00)",
+            default : "17:00",
+            validate(hour) {
+                return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(hour); 
+            },
+        }
+    ];
+
+    // prompt questions
+    inquirer.prompt(questions).then((answers) => {
+        console.log("\n 🧞 Creating Event For Google Calendar ...");
+        answers = parseAnswers(answers);
+    });
+
+    // Finally, args will contain the name of the event, the date, the start hour
+    // and end hour and the number of days for the email reminder
+    // {
+    //  description: answers.description,
+    //  name: answers.name,
+    //  year: answers.year,
+    //  month: answers.month,
+    //  shour: startTime[0],
+    //  ehour: endTime[0],
+    //  sminutes: startTime[1],
+    //  eminutes: endTime[1],
+    // }
+    const event = {
+        calendarId: "primary",
+        requestBody: {
+            summary: answers.name,
+            location: "",
+            description: answers.description,
+            start: {
+                dateTime: new Date(answers.year, answers.month, answers.day, answers.shour,answers.sminutes), //"2015-05-28T09:00:00-07:00",
+                timeZone: "America/Santiago",
+            },
+            end: {
+                dateTime: answers.date[1], 
+                timeZone: "America/Santiago",
+            },
+            recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
+            attendees: [],
+            reminders: {
+                useDefault: false,
+                overrides: [
+                    { method: "email", minutes: answers.reminder * 24 * 60 },
+                    { method: "popup", minutes: 60 },
+                ],
+            },
+        },
+    };
+}

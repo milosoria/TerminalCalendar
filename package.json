@@ -1,6 +1,6 @@
 {
-    "name": "terminalcalendar",
-    "description": "Interactive cli to create google calendar events",
+    "name": "termcal",
+    "description": "Interactive CLI to create google calendar events",
     "version": "1.0.0",
     "main": "src/index.js",
     "scripts": {
@@ -8,15 +8,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/milosoria/TerminalCalendar.git"
+        "url": "git+https://github.com/milosoria/termcal.git"
     },
     "keywords": [],
-    "author": "Camilo Soria <camilo.soria@uc.cl> (https://github.com/milosoria)",
+    "author": "milosoria <camilo.soria@uc.cl> (https://github.com/milosoria)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/milosoria/TerminalCalendar/issues"
+        "url": "https://github.com/milosoria/termcal/issues"
     },
-    "homepage": "https://github.com/milosoria/TerminalCalendar#readme",
+    "homepage": "https://github.com/milosoria/termcal#readme",
     "dependencies": {
         "googleapis": "^83.0.0",
         "inquirer": "^8.1.2"
