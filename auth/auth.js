@@ -1,6 +1,6 @@
-const fs = require("fs");
-const readline = require("readline");
-const { google } = require("googleapis");
+import fs from 'fs';
+import readline from 'readline';
+import {google} from 'googleapis';
 
 // Scope needed for event insertion
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
@@ -103,7 +103,7 @@ function readCredentials() {
     return oAuth2Client;
 }
 
-module.exports ={
+export {
     readCredentials,
     insertEvent,
 }
