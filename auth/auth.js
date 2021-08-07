@@ -1,6 +1,7 @@
-import fs from 'fs';
-import readline from 'readline';
-import {google} from 'googleapis';
+// Requires
+const fs = require('fs');
+const readline = require('readline');
+const google = require('googleapis');
 
 // Scope needed for event insertion
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
@@ -77,7 +78,7 @@ function insertEvent(event, auth) {
             calendarId: "primary",
             resource: event,
         },
-        function (err, event) {
+        (err, event) => {
             if (err) {
                 console.log(
                     "There was an error contacting the Calendar service: " + err
@@ -103,7 +104,7 @@ function readCredentials() {
     return oAuth2Client;
 }
 
-export {
+module.exports = {
     readCredentials,
-    insertEvent,
-}
+    insertEvent
+} 
