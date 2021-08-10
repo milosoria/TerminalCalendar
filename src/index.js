@@ -1,4 +1,5 @@
-const {readCredentials, insertEvent} = require("../auth/auth.js");
+#! /usr/bin/env node
+const {readCredentials, insertEvent} = require("./auth/auth.js");
 const { parseAnswers, isValidDate } = require("./validation.js");
 
 const inquirer = require("inquirer");

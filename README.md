@@ -1,8 +1,9 @@
 <h1>Terminal Calendar</h1>
 
-*TODO*:
+<h3>TODO</h3>_:
+
     -[ ] Timezone hardcoded to America/Santiago
-    -[ ] Credentials of the project needed for auth 
+    -[ ] Credentials of the project needed for auth
 
 <h2>Installation</h2>
 - npm install termcal
