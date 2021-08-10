@@ -10,10 +10,14 @@ Create Google Calendar events from your terminal with a simple intercative CLI
 
 <h2>Installation</h2>
 To use globally run
-```
+
+```sh
 npm install -g termcal
 ```
+
 Then
+
 ``` sh
 termcal
 ```
+
