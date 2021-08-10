@@ -16,10 +16,10 @@ function isLeap(year) {
  * @param {m int} month
  * @param {y int} year
  */
-function isValidDate(d, m, y) {
+function isValidDate(d, m, y, validYears) {
     // If year, month and day
     // are not in given range
-    if (y > VALIDYEARS[1] || y < VALIDYEARS[0]) return false;
+    if (y > validYears[1] || y < validYears[0]) return false;
 
     if (m < 1 || m > 12) return false;
     if (d < 1 || d > 31) return false;
@@ -45,24 +45,51 @@ function isValidDate(d, m, y) {
  * @param {answers Object} answers obtained via inquirer prompt
  */
 function parseAnswers(answers) {
-    const startTime = answers.startHour.split(":");
-    const endTime = answers.endHour.split(":");
+    const [shour,sminutes] = answers.startHour.split(":");
+    const [ehour,eminutes] = answers.endHour.split(":");
 
+    // TODO: missing endtime ????
     return {
-        description: answers.description,
-        name: answers.name,
-        year: answers.year,
-        month: answers.month,
-        shour: startTime[0],
-        ehour: endTime[0],
-        sminutes: startTime[1],
-        eminutes: endTime[1],
+        calendarId: "primary",
+        resource: {
+            summary: answers.name,
+            location: "",
+            description: answers.description,
+            start: {
+                dateTime: new Date(
+                    answers.year,
+                    answers.month,
+                    answers.day,
+                    shour,
+                    sminutes
+                ).toISOString(), //"2015-05-28T09:00:00-07:00",
+                timeZone: "America/Santiago",
+            },
+            end: {
+                dateTime: new Date(
+                    answers.year,
+                    answers.month,
+                    answers.day,
+                    ehour,
+                    eminutes
+                ).toISOString(), //"2015-05-28T09:00:00-07:00",
+                timeZone: "America/Santiago",
+            },
+            recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
+            attendees: [],
+            reminders: {
+                useDefault: false,
+                overrides: [
+                    { method: "email", minutes: answers.reminder * 24 * 60 },
+                    { method: "popup", minutes: 60 },
+                ],
+            },
+        },
     };
 }
 
 module.exports = {
     parseAnswers,
     isValidDate,
-    isLeap
 }
 

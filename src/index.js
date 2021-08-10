@@ -1,21 +1,15 @@
-// TODO: what is the problem with this shittttttt
-// Requires
-const { readCredentials, insertEvent } = require("../auth/auth.js");
-const { parseAnswers, isValidDate, isLeap } = require("./validation.js");
+const {readCredentials, insertEvent} = require("../auth/auth.js");
+const { parseAnswers, isValidDate } = require("./validation.js");
 
 const inquirer = require("inquirer");
+
 
 // VARIABLES DECLARATION
 // valid years range
 const VALIDYEARS = [new Date().getFullYear(), 9999];
-let YEAR, MONTH;
-let answers;
+let YEAR, MONTH, EVENT;
 
-/**
- * Inquires for input in order to create an event object
- * @return {event Object} Event object with input entered by user
- */
-// Create the questions
+// Create questions
 const questions = [
     {
         type: "input",
@@ -88,7 +82,7 @@ const questions = [
             } catch (TypeError) {
                 isNan = false;
             }
-            const pass = isValidDate(day, MONTH, YEAR) && isNan;
+            const pass = isValidDate(day, MONTH, YEAR, VALIDYEARS) && isNan;
 
             if (pass) {
                 return true;
@@ -110,7 +104,7 @@ const questions = [
         type: "input",
         name: "startHour",
         message: "Enter the start hour of the event",
-        default: "12:00",
+        default: "16:00",
         validate(hour) {
             return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(hour);
         },
@@ -125,43 +119,9 @@ const questions = [
         },
     },
 ];
-// TODO: fix this!!
+
 inquirer.prompt(questions).then((answers) => {
     console.log("\n 🧞 Creating Event For Google Calendar ...");
-    answers = parseAnswers(answers);
+    EVENT = parseAnswers(answers);
+    readCredentials(EVENT,insertEvent);
 });
-
-const eventObject = {
-    calendarId: "primary",
-    requestBody: {
-        summary: answers.name,
-        location: "",
-        description: answers.description,
-        start: {
-            dateTime: new Date(
-                answers.year,
-                answers.month,
-                answers.day,
-                answers.shour,
-                answers.sminutes
-            ), //"2015-05-28T09:00:00-07:00",
-            timeZone: "America/Santiago",
-        },
-        end: {
-            dateTime: answers.date[1],
-            timeZone: "America/Santiago",
-        },
-        recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
-        attendees: [],
-        reminders: {
-            useDefault: false,
-            overrides: [
-                { method: "email", minutes: answers.reminder * 24 * 60 },
-                { method: "popup", minutes: 60 },
-            ],
-        },
-    },
-};
-
-const oAuth2Client = readCredentials();
-insertEvent(eventObject, oAuth2Client);

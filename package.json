@@ -18,8 +18,8 @@
     },
     "homepage": "https://github.com/milosoria/termcal#readme",
     "dependencies": {
-        "googleapis": "^83.0.0",
+        "googleapis": "^84.0.0",
         "inquirer": "^8.1.2"
     },
-    "type": "require" 
+    "type": "require"
 }
