@@ -79,16 +79,14 @@ function insertEvent(event,auth) {
         version: "v3",
         auth: auth,
     });
-    console.log(event);
 
     calendar.events.insert(
         {
             auth: auth,
             calendarId: "primary",
-            event,
+            requestBody: event,
         },
         (err, event) => {
-            console.log(err);
             if (err) {
                 console.log(
                     "There was an error contacting the Calendar service: " +
@@ -96,7 +94,7 @@ function insertEvent(event,auth) {
                 );
                 return;
             }
-            console.log("Event created: %s", event.htmlLink);
+            console.log("Event created: %s", event);
         }
     );
 }

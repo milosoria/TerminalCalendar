@@ -47,11 +47,9 @@ function isValidDate(d, m, y, validYears) {
 function parseAnswers(answers) {
     const [shour,sminutes] = answers.startHour.split(":");
     const [ehour,eminutes] = answers.endHour.split(":");
+    answers.month = parseInt(answers.month) - 1; 
 
-    // TODO: missing endtime ????
     return {
-        calendarId: "primary",
-        resource: {
             summary: answers.name,
             location: "",
             description: answers.description,
@@ -84,7 +82,6 @@ function parseAnswers(answers) {
                     { method: "popup", minutes: 60 },
                 ],
             },
-        },
     };
 }
 
