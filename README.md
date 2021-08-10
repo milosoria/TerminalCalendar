@@ -6,7 +6,7 @@ Create Google Calendar events from your terminal with a simple intercative CLI
 - [ ] Timezone hardcoded to America/Santiago
 - [ ] Events can only be created for the actual year
 - [ ] No option prompted for recurrence
-- [ ] Credentials of the project needed for auth
+- [ ] Credentials of the project needed for [OAuth](https://developers.google.com/calendar/api/quickstart/nodejs)
 
 <h2>Installation</h2>
 To use globally run
