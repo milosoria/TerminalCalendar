@@ -105,7 +105,7 @@ const questions = [
         type: "input",
         name: "startHour",
         message: "Enter the start hour of the event",
-        default: "16:00",
+        default: "12:00",
         validate(hour) {
             return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(hour);
         },
@@ -114,7 +114,7 @@ const questions = [
         type: "input",
         name: "endHour",
         message: "Enter the end hour of the event",
-        default: "17:00",
+        default: "23:00",
         validate(hour) {
             return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(hour);
         },

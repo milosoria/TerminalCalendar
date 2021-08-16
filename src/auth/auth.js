@@ -7,6 +7,7 @@ const { google } = require("googleapis");
 // time.
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
 const TOKEN_PATH = "token.json";
+const CREDENTIALS_PATH = "credentials.json";
 
 /**
 * Get and store new token after prompting for user authorization */
@@ -63,7 +64,7 @@ function authorize(credentials, event,callback) {
 * Load client secrets from a local file.
 */
 function readCredentials(event,callback) {
-    fs.readFile("credentials.json", (err, content) => {
+    fs.readFile(CREDENTIALS_PATH, (err, content) => {
         if (err)
         return console.log("Error loading client secret file:", err);
         // Authorize a client with credentials, then call the Google Calendar API.
