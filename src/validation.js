@@ -71,7 +71,7 @@ function parseAnswers(answers) {
                     ehour,
                     eminutes
                 ).toISOString(), //"2015-05-28T09:00:00-07:00",
-                timeZone: "America/Santiago",
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             },
             recurrence: ["RRULE:FREQ=DAILY;COUNT=1"],
             attendees: [],

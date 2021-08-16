@@ -3,8 +3,6 @@ Create Google Calendar events from your terminal with a simple and intercative C
 
 <h3>TODO: :notebook: </h3>
 
-- [ ] Timezone hardcoded to America/Santiago
-- [ ] Events can only be created for the actual year
 - [ ] No option prompted for recurrence
 - [ ] Credentials of the project needed for [OAuth](https://developers.google.com/calendar/api/quickstart/nodejs)
     - [ ] How to create credentials client-side, in order to create credentials.json?
