@@ -6,8 +6,8 @@ const { google } = require("googleapis");
 // created automatically when the authorization flow completes for the first
 // time.
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
-const TOKEN_PATH = "token.json";
-const CREDENTIALS_PATH = "credentials.json";
+const TOKEN_PATH = __dirname + "/token.json";
+const CREDENTIALS_PATH = __dirname +"/credentials.json";
 
 /**
 * Get and store new token after prompting for user authorization */
@@ -95,7 +95,7 @@ function insertEvent(event,auth) {
                 );
                 return;
             }
-            console.log("Event created: %s", event);
+            console.log("Event created: %s", event.status=='200'?'Sucess!!':'Error!!');
         }
     );
 }

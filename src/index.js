@@ -54,6 +54,7 @@ const questions = [
         type: "input",
         name: "year",
         message: "Enter the year of the event (number)",
+        default: "2021",
         validate(year) {
             let pass = true;
             let isNan = true;
@@ -96,7 +97,7 @@ const questions = [
         type: "input",
         name: "reminder",
         message: "Days before the event to get a reminder",
-        default: "0",
+        default: "3",
         validate(days) {
             return /^[0-9]/.test(days);
         },
