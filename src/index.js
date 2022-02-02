@@ -54,7 +54,7 @@ const questions = [
         type: "input",
         name: "year",
         message: "Enter the year of the event (number)",
-        default: "2021",
+        default: new Date().getFullYear(),
         validate(year) {
             let pass = true;
             let isNan = true;
