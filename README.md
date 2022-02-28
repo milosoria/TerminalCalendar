@@ -1,4 +1,5 @@
 # Terminal Calendar
+
 Create Google Calendar events from your terminal with a simple and intercative CLI
 
 ### TODO: :notebook:
